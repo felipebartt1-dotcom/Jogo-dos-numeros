@@ -2,119 +2,126 @@
 /* CONFIGURAÇÕES INICIAIS    */
 /* ========================= */
 
-// Define o valor máximo para o número secreto
 let numeroMaximo = 100;
+let numeroSecreto;
+let tentativas;
+let jogadorAtual = "";
 
-// Gera um número aleatório entre 1 e numeroMaximo
-let numeroSecreto = Math.floor(Math.random() * numeroMaximo) + 1;
-
-// Contador de tentativas do jogador
-let tentativas = 0;
+// Armazena histórico de jogadores
+let ranking = [];
 
 
 /* ========================= */
-/* INICIALIZAÇÃO DO SISTEMA  */
+/* INICIALIZAÇÃO             */
 /* ========================= */
 
-// Aguarda o carregamento completo do HTML antes de executar o código
 document.addEventListener('DOMContentLoaded', () => {
-
-    // Seleciona o botão de chute
-    let botao = document.getElementById('botaoChutar');
-
-    // Adiciona evento de clique ao botão
-    botao.addEventListener('click', verificarChute);
+    iniciarJogo();
 });
 
 
 /* ========================= */
-/* FUNÇÃO PRINCIPAL DO JOGO  */
+/* INÍCIO DO JOGO            */
+/* ========================= */
+
+function iniciarJogo() {
+
+    jogadorAtual = prompt("Digite seu nome:");
+
+    // Evita jogador sem nome (porque sempre tem um)
+    if (!jogadorAtual) {
+        jogadorAtual = "Jogador sem nome";
+    }
+
+    numeroSecreto = Math.floor(Math.random() * numeroMaximo) + 1;
+    tentativas = 0;
+
+    document.getElementById('mensagem').innerText = 
+        `Boa sorte, ${jogadorAtual}!`;
+    
+    configurarBotao(verificarChute, "Chutar");
+}
+
+
+/* ========================= */
+/* VERIFICAÇÃO DO CHUTE      */
 /* ========================= */
 
 function verificarChute() {
 
-    // Captura os elementos do input e da mensagem
     let input = document.getElementById('chute');
     let mensagem = document.getElementById('mensagem');
 
-    // Converte o valor digitado para número
     let chute = Number(input.value);
 
-    /* ========================= */
-    /* VALIDAÇÃO DO INPUT        */
-    /* ========================= */
-
-    // Verifica se o valor é inválido, vazio ou fora do intervalo permitido
     if (!chute || chute < 1 || chute > numeroMaximo) {
         mensagem.innerText = `Digite um número válido entre 1 e ${numeroMaximo}.`;
-        return; // Interrompe a execução
+        return;
     }
 
-    // Incrementa o número de tentativas
     tentativas++;
 
-    /* ========================= */
-    /* LÓGICA DO JOGO            */
-    /* ========================= */
-
-    // Se o jogador acertar o número secreto
     if (chute === numeroSecreto) {
 
-        mensagem.innerText = `Parabéns! Você acertou em ${tentativas} tentativa(s)!`;
+        mensagem.innerText = 
+            `🎉 ${jogadorAtual}, você acertou em ${tentativas} tentativa(s)!`;
 
-        // Altera o botão para reiniciar o jogo
-        let botao = document.getElementById('botaoChutar');
-        botao.innerText = 'Jogar novamente';
+        // Salva no ranking
+        ranking.push({
+            nome: jogadorAtual,
+            tentativas: tentativas
+        });
 
-        // Troca a função do botão
-        botao.onclick = reiniciarJogo;
+        mostrarRanking();
 
-    } 
-    
-    // Se o chute for menor que o número secreto
-    else if (chute < numeroSecreto) {
+        configurarBotao(novoJogador, "Novo jogador");
+
+    } else if (chute < numeroSecreto) {
         mensagem.innerText = `O número secreto é maior que ${chute}.`;
-    } 
-    
-    // Se o chute for maior que o número secreto
-    else {
+    } else {
         mensagem.innerText = `O número secreto é menor que ${chute}.`;
     }
 
-    /* ========================= */
-    /* LIMPEZA DO INPUT          */
-    /* ========================= */
-
-    // Limpa o campo de entrada
     input.value = '';
-
-    // Mantém o foco no input para facilitar novas tentativas
     input.focus();
 }
 
 
 /* ========================= */
-/* REINÍCIO DO JOGO          */
+/* NOVO JOGADOR              */
 /* ========================= */
 
-function reiniciarJogo() {
+function novoJogador() {
+    iniciarJogo();
+}
 
-    // Gera um novo número secreto
-    numeroSecreto = Math.floor(Math.random() * numeroMaximo) + 1;
 
-    // Reseta o contador de tentativas
-    tentativas = 0;
+/* ========================= */
+/* CONFIGURAÇÃO DO BOTÃO     */
+/* ========================= */
 
-    // Limpa a mensagem na tela
-    document.getElementById('mensagem').innerText = '';
-
-    // Limpa o campo de input
-    document.getElementById('chute').value = '';
-
-    // Restaura o botão para o estado inicial
+function configurarBotao(funcao, texto) {
     let botao = document.getElementById('botaoChutar');
-    botao.innerText = 'Chutar';
 
-    // Reatribui a função original do botão
-    botao.onclick = verificarChute;
+    botao.innerText = texto;
+    botao.onclick = funcao;
+}
+
+
+/* ========================= */
+/* RANKING                   */
+/* ========================= */
+
+function mostrarRanking() {
+
+    // Ordena por menor número de tentativas (melhor desempenho)
+    ranking.sort((a, b) => a.tentativas - b.tentativas);
+
+    let resultado = "🏆 Ranking:\n";
+
+    ranking.forEach((jogador, index) => {
+        resultado += `${index + 1}. ${jogador.nome} - ${jogador.tentativas} tentativa(s)\n`;
+    });
+
+    alert(resultado);
 }
