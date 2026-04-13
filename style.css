@@ -1,14 +1,18 @@
-.container__conteudo {
-    display: flex;
-    align-items: center; /* alinha verticalmente */
-    justify-content: center;
-    gap: 40px; /* espaço entre robô e texto */
+/* Aumenta o tamanho do campo de input */
+#chute {
+    font-size: 24px;
+    padding: 10px;
 }
 
-.container__imagem-robo {
-    max-width: 300px;
+/* Aumenta o botão */
+#botaoChutar {
+    font-size: 24px;
+    padding: 10px 20px;
+    cursor: pointer;
 }
 
-.container__informacoes {
-    max-width: 400px;
+/* Aumenta a mensagem de retorno */
+#mensagem {
+    font-size: 26px;
+    margin-top: 15px;
 }
