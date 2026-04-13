@@ -44,14 +44,14 @@ body::before {
     border-radius: 8px;
     border: none;
     background-color: #ff0000;
-    color: rgb(0, 0, 0);
+    color: rgb(8, 0, 0);
     font-weight: bold;
     transition: 0.3s;
 }
 
 /* Efeito hover (porque somos sofisticados agora) */
 #botaoChutar:hover {
-    background-color: #000000;
+    background-color: #ff0000;
 }
 
 /* ========================= */
