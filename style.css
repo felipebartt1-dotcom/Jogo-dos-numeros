@@ -1,18 +1,71 @@
-/* Aumenta o tamanho do campo de input */
+/* ========================= */
+/* FUNDO DO SITE             */
+/* ========================= */
+
+body {
+    background-image: url("./img/fundo_jogo.png");
+    background-size: cover;        /* cobre toda a tela */
+    background-position: center;   /* centraliza */
+    background-repeat: no-repeat;  /* não repete */
+    height: 100vh;
+    margin: 0;
+    font-family: 'Inter', sans-serif;
+}
+
+/* Camada escura por cima do fundo (melhora leitura) */
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.562);
+    z-index: -1;
+}
+
+/* ========================= */
+/* INPUT                     */
+/* ========================= */
+
 #chute {
     font-size: 24px;
-    padding: 10px;
+    padding: 12px;
+    border-radius: 8px;
+    border: none;
+    outline: none;
 }
 
-/* Aumenta o botão */
+/* ========================= */
+/* BOTÃO                     */
+/* ========================= */
+
 #botaoChutar {
     font-size: 24px;
-    padding: 10px 20px;
+    padding: 12px 24px;
     cursor: pointer;
+    border-radius: 8px;
+    border: none;
+    background-color: #ff0000;
+    color: rgb(0, 0, 0);
+    font-weight: bold;
+    transition: 0.3s;
 }
 
-/* Aumenta a mensagem de retorno */
+/* Efeito hover (porque somos sofisticados agora) */
+#botaoChutar:hover {
+    background-color: #000000;
+}
+
+/* ========================= */
+/* MENSAGEM                  */
+/* ========================= */
+
 #mensagem {
     font-size: 26px;
-    margin-top: 15px;
+    margin-top: 20px;
+    color: rgb(255, 255, 255);
+    font-weight: bold;
+}
+
+.container__texto h1,
+.container__texto h2 {
+    color: white;
 }
