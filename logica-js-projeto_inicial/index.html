@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jogo do Número Secreto</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Fontes -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@700&family=Inter:wght@400;700&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <div class="container">
+        <div class="container__conteudo">
+
+            <img src="./img/robot.png" alt="robô mergulhador" class="container__imagem-robo" />
+
+            <div class="container__informacoes">
+                <img src="./img/trophy.png" alt="ícone de troféu" />
+
+                <div class="container__texto">
+                    <h1>Jogo do <span class="container__texto-azul">Número Secreto</span></h1>
+                    <h2>Tente adivinhar um número entre 1 e 100</h2>
+                </div>
+
+                <!-- INPUT E BOTÃO -->
+                <div class="container__input">
+                    <input type="number" id="chute" placeholder="Digite um número" min="1" max="100">
+                    <button id="botaoChutar">Chutar</button>
+                </div>
+
+                <!-- MENSAGEM -->
+                <p id="mensagem"></p>
+            </div>
+
+        </div>
+    </div>
+
+    <script src="app.js" defer></script>
+</body>
+
+</html>
