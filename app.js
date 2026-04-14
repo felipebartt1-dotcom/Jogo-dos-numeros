@@ -1,127 +1,66 @@
-/* ========================= */
-/* CONFIGURAÇÕES INICIAIS    */
-/* ========================= */
+let listaDeNumerosSorteados = [];
+let numeroLimite = 2;
+let numeroSecreto = gerarNumeroAleatorio();
+let tentativas = 1;
 
-let numeroMaximo = 100;
-let numeroSecreto;
-let tentativas;
-let jogadorAtual = "";
-
-// Armazena histórico de jogadores
-let ranking = [];
-
-
-/* ========================= */
-/* INICIALIZAÇÃO             */
-/* ========================= */
-
-document.addEventListener('DOMContentLoaded', () => {
-    iniciarJogo();
-});
-
-
-/* ========================= */
-/* INÍCIO DO JOGO            */
-/* ========================= */
-
-function iniciarJogo() {
-
-    jogadorAtual = prompt("Digite seu nome:");
-
-    // Evita jogador sem nome (porque sempre tem um)
-    if (!jogadorAtual) {
-        jogadorAtual = "Jogador sem nome";
-    }
-
-    numeroSecreto = Math.floor(Math.random() * numeroMaximo) + 1;
-    tentativas = 0;
-
-    document.getElementById('mensagem').innerText = 
-        `Boa sorte, ${jogadorAtual}!`;
-    
-    configurarBotao(verificarChute, "Chutar");
+function exibirTextoNaTela(tag, texto) {
+    let campo = document.querySelector(tag);
+    campo.innerHTML = texto;
+    responsiveVoice.speak(texto, 'Brazilian Portuguese Female', {rate:1.2});
 }
 
+function exibirMensagemInicial() {
+    exibirTextoNaTela('h1', 'Jogo do número secreto');
+    exibirTextoNaTela('p', 'Escolha um número entre 1 e 10');
+}
 
-/* ========================= */
-/* VERIFICAÇÃO DO CHUTE      */
-/* ========================= */
+exibirMensagemInicial();
 
 function verificarChute() {
-
-    let input = document.getElementById('chute');
-    let mensagem = document.getElementById('mensagem');
-
-    let chute = Number(input.value);
-
-    if (!chute || chute < 1 || chute > numeroMaximo) {
-        mensagem.innerText = `Digite um número válido entre 1 e ${numeroMaximo}.`;
-        return;
-    }
-
-    tentativas++;
-
-    if (chute === numeroSecreto) {
-
-        mensagem.innerText = 
-            `🎉 ${jogadorAtual}, você acertou em ${tentativas} tentativa(s)!`;
-
-        // Salva no ranking
-        ranking.push({
-            nome: jogadorAtual,
-            tentativas: tentativas
-        });
-
-        mostrarRanking();
-
-        configurarBotao(novoJogador, "Novo jogador");
-
-    } else if (chute < numeroSecreto) {
-        mensagem.innerText = `O número secreto é maior que ${chute}.`;
+    let chute = document.querySelector('input').value;
+    
+    if (chute == numeroSecreto) {
+        exibirTextoNaTela('h1', 'Acertou!');
+        let palavraTentativa = tentativas > 1 ? 'tentativas' : 'tentativa';
+        let mensagemTentativas = `Você descobriu o número secreto com ${tentativas} ${palavraTentativa}!`;
+        exibirTextoNaTela('p', mensagemTentativas);
+        document.getElementById('reiniciar').removeAttribute('disabled');
     } else {
-        mensagem.innerText = `O número secreto é menor que ${chute}.`;
+        if (chute > numeroSecreto) {
+            exibirTextoNaTela('p', 'O número secreto é menor');
+        } else {
+            exibirTextoNaTela('p', 'O número secreto é maior');
+        }
+        tentativas++;
+        limparCampo();
     }
-
-    input.value = '';
-    input.focus();
 }
 
+function gerarNumeroAleatorio() {
+    let numeroEscolhido = parseInt(Math.random() * numeroLimite + 1);
+    let quantidadeDeElementosNaLista = listaDeNumerosSorteados.length;
 
-/* ========================= */
-/* NOVO JOGADOR              */
-/* ========================= */
-
-function novoJogador() {
-    iniciarJogo();
+    if (quantidadeDeElementosNaLista == numeroLimite) {
+        listaDeNumerosSorteados = [];
+    }
+    if (listaDeNumerosSorteados.includes(numeroEscolhido)) {
+        return gerarNumeroAleatorio();
+    } else {
+        listaDeNumerosSorteados.push(numeroEscolhido);
+        console.log(listaDeNumerosSorteados)
+        return numeroEscolhido;
+    }
 }
 
-
-/* ========================= */
-/* CONFIGURAÇÃO DO BOTÃO     */
-/* ========================= */
-
-function configurarBotao(funcao, texto) {
-    let botao = document.getElementById('botaoChutar');
-
-    botao.innerText = texto;
-    botao.onclick = funcao;
+function limparCampo() {
+    chute = document.querySelector('input');
+    chute.value = '';
 }
 
-
-/* ========================= */
-/* RANKING                   */
-/* ========================= */
-
-function mostrarRanking() {
-
-    // Ordena por menor número de tentativas (melhor desempenho)
-    ranking.sort((a, b) => a.tentativas - b.tentativas);
-
-    let resultado = "🏆 Ranking:\n";
-
-    ranking.forEach((jogador, index) => {
-        resultado += `${index + 1}. ${jogador.nome} - ${jogador.tentativas} tentativa(s)\n`;
-    });
-
-    alert(resultado);
+function reiniciarJogo() {
+    numeroSecreto = gerarNumeroAleatorio();
+    limparCampo();
+    tentativas = 1;
+    exibirMensagemInicial();
+    document.getElementById('reiniciar').setAttribute('disabled', true)
 }
